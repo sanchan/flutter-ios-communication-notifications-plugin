@@ -13,13 +13,13 @@ public class IosCommunicationNotificationPlugin: NSObject, FlutterPlugin {
     public var flutterChannel: FlutterMethodChannel?
     
     public func onClickNotification(_ userInfo: [AnyHashable : Any]) {
+        // Save to local storage - for get initial payload
+        let defaults = UserDefaults.standard
+        defaults.set(convertDateToString(Date()), forKey: IosCommunicationConstant.payloadUpdatedAt)
+        defaults.set(userInfo["data"], forKey: IosCommunicationConstant.payloadStored)
+        
         if (self.flutterChannel != nil) {
             self.flutterChannel?.invokeMethod("onClick", arguments: userInfo)
-        } else {
-            // Save to local storage - for get initial payload
-            let defaults = UserDefaults.standard
-            defaults.set(convertDateToString(Date()), forKey: IosCommunicationConstant.payloadUpdatedAt)
-            defaults.set(userInfo["data"], forKey: IosCommunicationConstant.payloadStored)
         }
     }
     
