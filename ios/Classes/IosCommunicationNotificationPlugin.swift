@@ -35,15 +35,14 @@ public class IosCommunicationNotificationPlugin: NSObject, FlutterPlugin {
         switch (call.method) {
         case "getInitialPayload":
             let defaults = UserDefaults.standard
-            let updatedAt = defaults.string(forKey: IosCommunicationConstant.payloadUpdatedAt)
-            
-            if (updatedAt == nil || (Date().timeIntervalSinceReferenceDate -  convertStringToDate(updatedAt!).timeIntervalSinceReferenceDate) <= 5) {
-                result(defaults.string(forKey: IosCommunicationConstant.payloadStored))
-            } else {
+            let payload = defaults.string(forKey: IosCommunicationConstant.payloadStored)
+
+            if (payload != nil) {
                 defaults.removeObject(forKey: IosCommunicationConstant.payloadStored)
                 defaults.removeObject(forKey: IosCommunicationConstant.payloadUpdatedAt)
-                result(nil)
             }
+
+            result(payload)
             
             break
         case "showNotification":
